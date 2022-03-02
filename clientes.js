@@ -8,23 +8,25 @@ const clienteSchema = mongoose.Schema({
   contraseña: String,
   direccion: String,
   telefono: String,
-
 })
-
+//Esquema Pago
+const pagoSchema = mongoose.Schema({
+  numTarjeta: Number,
+  propietario: String,
+  mesCaducidad: Number,
+  anioCaducidad: Number,
+})
 //Esquema para clientes
 const clienteSchema = mongoose.Schema({
-    id_cliente: Number,
+  id_cliente: Number,
   nombre: String,
   email: String,
   contraseña: String,
   direccion: String,
-  telefono: String,
-
-  })
-
-  //Definición del modelo
+  pagos: [pagoSchema],
+})
+//Definición del modelo
 const userModel = mongoose.model('clientes', clienteSchema)
-
 //Agregar a un Cliente
 module.exports.agregarCliente = async (cliente) => {
   try {
@@ -41,57 +43,52 @@ module.exports.agregarCliente = async (cliente) => {
     console.log(err)
   }
 }
-
 //Obtener Clientes
 module.exports.obtenerTodos = async () => {
-    try {
-      const clientes = await userModel.find()
-      console.log('-----Clientes-----')
-      console.log(clientes)
-    } catch (err) {
-      console.log(err)
-    }
+  try {
+    const clientes = await userModel.find()
+    console.log('-----Clientes-----')
+    console.log(clientes)
+  } catch (err) {
+    console.log(err)
   }
-
-  //Obtener Clientes por nombre
+}
+//Obtener Clientes por nombre
 module.exports.obtenerPorNombre = async (nombre) => {
-    try {
-      const clientes = await userModel.find({ nombre: nombre })
-      console.log('-----Clientes-----')
-      console.log(clientes)
-    } catch (err) {
-      console.log(err)
-    }
+  try {
+    const clientes = await userModel.find({ nombre: nombre })
+    console.log('-----Clientes-----')
+    console.log(clientes)
+  } catch (err) {
+    console.log(err)
   }
-
-  //Actualizar clientes por nombre
+}
+//Actualizar clientes por nombre
 module.exports.actualizarPorNombre = async (nombre, cliente) => {
-    try {
-      const actualizarCliente = await userModel.updateOne(
-        { nombre: nombre },
-        {
-          $set: {
-            
-            nombre: cliente.nombre,
-            email: cliente.email,
-            contraseña: cliente.contraseña,
-            direccion: cliente.direccion,
-            telefono: cliente.telefono,
-          },
-        }
-      )
-      console.log('Actualizado Correctamente')
-    } catch (error) {
-      console.log(error)
-    }
+  try {
+    const actualizarCliente = await userModel.updateOne(
+      { nombre: nombre },
+      {
+        $set: {
+          nombre: cliente.nombre,
+          email: cliente.email,
+          contraseña: cliente.contraseña,
+          direccion: cliente.direccion,
+          telefono: cliente.telefono,
+        },
+      }
+    )
+    console.log('Actualizado Correctamente')
+  } catch (error) {
+    console.log(error)
   }
-
-  //Eliminar Clientes
+}
+//Eliminar Clientes
 module.exports.borrarCliente = async (nombre) => {
-    try {
-      const borrado = await userModel.deleteOne({ nombre: nombre })
-      console.log('Borrado Exitoso')
-    } catch (error) {
-      console.log(error)
-    }
+  try {
+    const borrado = await userModel.deleteOne({ nombre: nombre })
+    console.log('Borrado Exitoso')
+  } catch (error) {
+    console.log(error)
   }
+}
