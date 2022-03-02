@@ -46,6 +46,7 @@ const pedido = {
   cliente: cliente,
   pago: pago,
 }
+
 /////////////AGREGADO/////////////
 /*
 categoriaAdmin.agregarCategoria(categoria)
