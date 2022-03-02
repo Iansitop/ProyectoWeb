@@ -1,6 +1,10 @@
 const control = require('./control.js')
 const productoAdmin = require('./productos.js')
 const categoriaAdmin = require('./categorias.js')
+const clienteAdmin = require('./clientes.js')
+const destinoAdmin = require('./destinos.js')
+const pagoAdmin = require('./pagos.js')
+const pedidoAdmin = require('./pedidos.js')
 control.con()
 /*
 const producto = {
