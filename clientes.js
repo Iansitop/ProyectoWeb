@@ -1,14 +1,5 @@
 const mongoose = require('mongoose')
 //Creando schemas
-//Esquema para Cliente
-const clienteSchema = mongoose.Schema({
-  id_cliente: Number,
-  nombre: String,
-  email: String,
-  contraseña: String,
-  direccion: String,
-  telefono: String,
-})
 //Esquema Pago
 const pagoSchema = mongoose.Schema({
   numTarjeta: Number,
