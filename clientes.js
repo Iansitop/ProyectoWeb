@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 //Creando schemas
 //Esquema Pago
 const pagoSchema = mongoose.Schema({
+  id_pago: Number,
   numTarjeta: Number,
   propietario: String,
   mesCaducidad: Number,
@@ -26,6 +27,10 @@ module.exports.agregarCliente = async (cliente) => {
       cliente.id_cliente = ultimo[0].id_cliente + 1
     } else {
       cliente.id_cliente = 0
+    }
+    if ((await userModel.find({ nombre: cliente.nombre })).length != 0) {
+      console.log(`Ya hay un cliente llamado ${cliente.nombre}`)
+      return
     }
     const crearCliente = new userModel(cliente)
     const result = await crearCliente.save()
@@ -65,7 +70,6 @@ module.exports.actualizarPorNombre = async (nombre, cliente) => {
           email: cliente.email,
           contraseña: cliente.contraseña,
           direccion: cliente.direccion,
-          telefono: cliente.telefono,
         },
       }
     )
@@ -75,7 +79,7 @@ module.exports.actualizarPorNombre = async (nombre, cliente) => {
   }
 }
 //Eliminar Clientes
-module.exports.borrarCliente = async (nombre) => {
+module.exports.borrarClientePorNombre = async (nombre) => {
   try {
     const borrado = await userModel.deleteOne({ nombre: nombre })
     console.log('Borrado Exitoso')

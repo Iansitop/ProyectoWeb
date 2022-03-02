@@ -63,7 +63,7 @@ module.exports.actualizarPorNombre = async (nombre, categoria) => {
   }
 }
 //Método para borrar categorias
-module.exports.borrarCategoria = async (nombre) => {
+module.exports.borrarCategoriaPorNombre = async (nombre) => {
   try {
     await userModel.deleteOne({ nombre: nombre })
     console.log('Borrado Exitosamente')

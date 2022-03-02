@@ -74,7 +74,7 @@ module.exports.actualizarPorNombre = async (nombre, producto) => {
   }
 }
 //Método para borrar productos
-module.exports.borrarProducto = async (nombre) => {
+module.exports.borrarProductoPorNombre = async (nombre) => {
   try {
     await userModel.deleteOne({ nombre: nombre })
     console.log('Borrado Exitosamente')
