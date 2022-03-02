@@ -22,7 +22,8 @@ const userModel = mongoose.model('clientes', clienteSchema)
 //Agregar a un Cliente
 module.exports.agregarCliente = async (cliente) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       cliente.id_cliente = ultimo[0].id_cliente + 1
     } else {

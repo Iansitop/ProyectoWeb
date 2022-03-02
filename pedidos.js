@@ -1,5 +1,13 @@
 const mongoose = require('mongoose')
 //Creando schemas
+//Esquema Pago
+const pagoSchema = mongoose.Schema({
+  id_pago: Number,
+  numTarjeta: Number,
+  propietario: String,
+  mesCaducidad: Number,
+  anioCaducidad: Number,
+})
 //Esquema para clientes
 const clienteSchema = mongoose.Schema({
   id_cliente: Number,
@@ -8,14 +16,6 @@ const clienteSchema = mongoose.Schema({
   contraseña: String,
   direccion: String,
   pagos: [pagoSchema],
-})
-//Esquema Pago
-const pagoSchema = mongoose.Schema({
-  id_pago: Number,
-  numTarjeta: Number,
-  propietario: String,
-  mesCaducidad: Number,
-  anioCaducidad: Number,
 })
 //Esquema para categoria
 const categoriaSchema = mongoose.Schema({
@@ -45,7 +45,8 @@ const userModel = mongoose.model('pedidos', pedidoSchema)
 //Agregar un Pedido
 module.exports.agregarPedido = async (pedido) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       pedido.id_pedido = ultimo[0].id_pedido + 1
     } else {

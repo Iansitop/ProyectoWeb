@@ -41,9 +41,10 @@ module.exports.obtenerTodos = async () => {
   }
 }
 //Agregar a un destino
-module.exports.agregardestino = async (destino) => {
+module.exports.agregarDestino = async (destino) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       destino.id_destino = ultimo[0].id_destino + 1
     } else {

@@ -18,7 +18,8 @@ const userModel = mongoose.model('productos', productoSchema)
 //Agregar a un producto
 module.exports.agregarProducto = async (producto) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       producto.id_producto = ultimo[0].id_producto + 1
     } else {

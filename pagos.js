@@ -23,7 +23,8 @@ module.exports.obtenerTodos = async () => {
 //Agregar a un pago
 module.exports.agregarPago = async (pago) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       pago.id_pago = ultimo[0].id_pago + 1
     } else {

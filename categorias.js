@@ -19,7 +19,8 @@ module.exports.obtenerTodos = async () => {
 //Agregar a un categoria
 module.exports.agregarCategoria = async (categoria) => {
   try {
-    if ((await userModel.find().length) != 0) {
+    const consulta = await userModel.find()
+    if (consulta.length != 0) {
       const ultimo = await userModel.find().limit(1).sort({ $natural: -1 })
       categoria.id_categoria = ultimo[0].id_categoria + 1
     } else {
