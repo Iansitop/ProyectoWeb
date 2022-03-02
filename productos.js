@@ -11,6 +11,7 @@ const productoSchema = mongoose.Schema({
   nombre: String,
   precio: Number,
   categoria: categoriaSchema,
+  unidades: Number,
 })
 //Definición del modelo
 const userModel = mongoose.model('productos', productoSchema)
