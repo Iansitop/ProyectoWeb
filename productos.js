@@ -58,12 +58,13 @@ module.exports.obtenerPorNombre = async (nombre) => {
 //Método para actualizar productos
 module.exports.actualizarPorNombre = async (nombre, producto) => {
   try {
-    const actualizarProducto = await userModel.updateOne(
+    await userModel.updateOne(
       { nombre: nombre },
       {
         $set: {
           nombre: producto.nombre,
           precio: producto.precio,
+          unidades: producto.unidades,
         },
       }
     )
@@ -75,7 +76,7 @@ module.exports.actualizarPorNombre = async (nombre, producto) => {
 //Método para borrar productos
 module.exports.borrarProducto = async (nombre) => {
   try {
-    const borrado = await userModel.deleteOne({ nombre: nombre })
+    await userModel.deleteOne({ nombre: nombre })
     console.log('Borrado Exitosamente')
   } catch (error) {
     console.log(error)
