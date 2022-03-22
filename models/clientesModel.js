@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 //Creando schemas
+
 //Esquema Pago
 const pagoSchema = mongoose.Schema({
   id_pago: Number,
