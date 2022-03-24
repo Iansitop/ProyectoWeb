@@ -44,7 +44,7 @@ exports.agregarPedido = catchAsync(async (req, res, next) => {
 //Método para obtener Pedido por ID
 exports.obtenerPorID = catchAsync(async (req, res, next) => {
   console.log(req.params.id)
-  const pedido = await destinosModel.findById(req.params.id)
+  const pedido = await pedidosModel.findById(req.params.id)
   console.log('-----Pedidos-----')
   console.log(pedido)
   if (!pedido) {
