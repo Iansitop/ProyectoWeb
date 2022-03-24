@@ -1,8 +1,8 @@
 const destinosModel = require('../models/destinosModel')
 const catchAsync = require('../utils/catchAsync')
-
+const AppError = require('../utils/appError')
 //Método para obtener Destinos
-exports.obtenerTodos = async (req, res) => {
+exports.obtenerTodos = async (req, res, next) => {
   try {
     const destinos = await destinosModel.find()
     console.log('-----Destinos-----')
@@ -19,14 +19,11 @@ exports.obtenerTodos = async (req, res) => {
 }
 
 //Agregar un Destino
-exports.agregarDestino = catchAsync(async (req, res) => {
+exports.agregarDestino = catchAsync(async (req, res, next) => {
   try {
     const consulta = await destinosModel.find()
     if (consulta.length != 0) {
-      const ultimo = await destinosModel
-        .find()
-        .limit(1)
-        .sort({ $natural: -1 })
+      const ultimo = await destinosModel.find().limit(1).sort({ $natural: -1 })
       req.body.id_destino = ultimo[0].id_destino + 1
     } else {
       req.body.id_destino = 0
@@ -45,12 +42,15 @@ exports.agregarDestino = catchAsync(async (req, res) => {
 })
 
 //Método para obtener Destino por ID
-exports.obtenerPorID = catchAsync(async (req, res) => {
+exports.obtenerPorID = catchAsync(async (req, res, next) => {
   console.log(req.params.id)
   const destino = await destinosModel.findById(req.params.id)
   console.log('-----Destinos-----')
   console.log(destino)
   if (!destino) {
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(201).json({
       status: 'success',
@@ -63,7 +63,7 @@ exports.obtenerPorID = catchAsync(async (req, res) => {
 
 //Método para actualizar Destino
 
-exports.actualizarPorID = catchAsync(async (req, res) => {
+exports.actualizarPorID = catchAsync(async (req, res, next) => {
   const destino = await destinosModel.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -74,11 +74,9 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   )
 
   if (!destino) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',
@@ -91,15 +89,13 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
 
 //Método para borrar Destino
 
-exports.borrarDestinoPorId = catchAsync(async (req, res) => {
+exports.borrarDestinoPorId = catchAsync(async (req, res, next) => {
   const borrado = await destinosModel.findByIdAndDelete(req.params.id)
 
   if (!borrado) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',

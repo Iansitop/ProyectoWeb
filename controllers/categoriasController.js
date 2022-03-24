@@ -1,8 +1,9 @@
 const categoriasModel = require('../models/categoriasModel')
 const catchAsync = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
 
 //Método para obtener categorias
-exports.obtenerTodos = async (req, res) => {
+exports.obtenerTodos = async (req, res, next) => {
   try {
     const categorias = await categoriasModel.find()
     console.log('-----Categorias-----')
@@ -18,7 +19,7 @@ exports.obtenerTodos = async (req, res) => {
   }
 }
 //Agregar a un categoria
-exports.agregarCategoria = catchAsync(async (req, res) => {
+exports.agregarCategoria = catchAsync(async (req, res, next) => {
   try {
     const consulta = await categoriasModel.find()
     if (consulta.length != 0) {
@@ -51,12 +52,15 @@ exports.agregarCategoria = catchAsync(async (req, res) => {
   }
 })
 //Método para obtener categorias por nombre
-exports.obtenerPorID = catchAsync(async (req, res) => {
+exports.obtenerPorID = catchAsync(async (req, res, next) => {
   console.log(req.params.id)
   const categoria = await categoriasModel.findById(req.params.id)
   console.log('-----Categorias-----')
   console.log(categoria)
   if (!categoria) {
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(201).json({
       status: 'success',
@@ -67,7 +71,7 @@ exports.obtenerPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para actualizar categorias
-exports.actualizarPorID = catchAsync(async (req, res) => {
+exports.actualizarPorID = catchAsync(async (req, res, next) => {
   const categoria = await categoriasModel.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -78,11 +82,9 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   )
 
   if (!categoria) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',
@@ -93,15 +95,13 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para borrar categorias
-exports.borrarCategoriaPorId = catchAsync(async (req, res) => {
+exports.borrarCategoriaPorId = catchAsync(async (req, res, next) => {
   const borrado = await categoriasModel.findByIdAndDelete(req.params.id)
 
   if (!borrado) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',

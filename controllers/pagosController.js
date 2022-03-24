@@ -1,8 +1,8 @@
 const pagosModel = require('../models/pagosModel')
 const catchAsync = require('../utils/catchAsync')
-
+const AppError = require('../utils/appError')
 //Método para obtener pagos
-exports.obtenerTodos = async (req, res) => {
+exports.obtenerTodos = async (req, res, next) => {
   try {
     const pagos = await pagosModel.find()
     console.log('-----Pagos-----')
@@ -18,7 +18,7 @@ exports.obtenerTodos = async (req, res) => {
   }
 }
 //Agregar a un pago
-exports.agregarPago = catchAsync(async (req, res) => {
+exports.agregarPago = catchAsync(async (req, res, next) => {
   try {
     const consulta = await pagosModel.find()
     if (consulta.length != 0) {
@@ -51,12 +51,15 @@ exports.agregarPago = catchAsync(async (req, res) => {
   }
 })
 //Método para obtener pagos por nombre
-exports.obtenerPorID = catchAsync(async (req, res) => {
+exports.obtenerPorID = catchAsync(async (req, res, next) => {
   console.log(req.params.id)
   const pago = await pagosModel.findById(req.params.id)
   console.log('-----pagos-----')
   console.log(pago)
   if (!pago) {
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(201).json({
       status: 'success',
@@ -67,17 +70,15 @@ exports.obtenerPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para actualizar pagos
-exports.actualizarPorID = catchAsync(async (req, res) => {
+exports.actualizarPorID = catchAsync(async (req, res, next) => {
   const pago = await pagosModel.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   })
   if (!pago) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',
@@ -88,15 +89,13 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para borrar pagos
-exports.borrarPagoPorId = catchAsync(async (req, res) => {
+exports.borrarPagoPorId = catchAsync(async (req, res, next) => {
   const borrado = await pagosModel.findByIdAndDelete(req.params.id)
 
   if (!borrado) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',

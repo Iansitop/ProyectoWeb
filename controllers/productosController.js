@@ -1,8 +1,8 @@
 const productosModel = require('../models/productosModel')
 const catchAsync = require('../utils/catchAsync')
-
+const AppError = require('../utils/appError')
 //Método para obtener productos
-exports.obtenerTodos = async (req, res) => {
+exports.obtenerTodos = async (req, res, next) => {
   try {
     const productos = await productosModel.find()
     console.log('-----Productos-----')
@@ -18,7 +18,7 @@ exports.obtenerTodos = async (req, res) => {
   }
 }
 //Agregar a un producto
-exports.agregarProducto = catchAsync(async (req, res) => {
+exports.agregarProducto = catchAsync(async (req, res, next) => {
   try {
     const consulta = await productosModel.find()
     if (consulta.length != 0) {
@@ -48,12 +48,15 @@ exports.agregarProducto = catchAsync(async (req, res) => {
   }
 })
 //Método para obtener productos por nombre
-exports.obtenerPorID = catchAsync(async (req, res) => {
+exports.obtenerPorID = catchAsync(async (req, res, next) => {
   console.log(req.params.id)
   const producto = await productosModel.findById(req.params.id)
   console.log('-----productos-----')
   console.log(producto)
   if (!producto) {
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(201).json({
       status: 'success',
@@ -64,7 +67,7 @@ exports.obtenerPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para actualizar productos
-exports.actualizarPorID = catchAsync(async (req, res) => {
+exports.actualizarPorID = catchAsync(async (req, res, next) => {
   const producto = await productosModel.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -75,11 +78,9 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   )
 
   if (!producto) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',
@@ -90,15 +91,13 @@ exports.actualizarPorID = catchAsync(async (req, res) => {
   }
 })
 //Método para borrar productos
-exports.borrarProductoPorId = catchAsync(async (req, res) => {
+exports.borrarProductoPorId = catchAsync(async (req, res, next) => {
   const borrado = await productosModel.findByIdAndDelete(req.params.id)
 
   if (!borrado) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    })
-    console.log(error)
+    return next(
+      new AppError(`No hay categorias con el id: ${req.params.id}`, 404)
+    )
   } else {
     res.status(200).json({
       status: 'success',
