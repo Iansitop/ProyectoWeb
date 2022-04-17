@@ -15,7 +15,6 @@ const clienteSchema = mongoose.Schema({
   nombre: String,
   email: String,
   contraseña: String,
-  direccion: String,
   pagos: [pagoSchema],
 })
 //Definición del modelo
