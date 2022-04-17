@@ -30,6 +30,19 @@ const productoSchema = mongoose.Schema({
   categoria: categoriaSchema,
   unidades: Number,
 })
+
+//Esquema para destino
+const destinoSchema = mongoose.Schema({
+  id_destino: Number,
+  pais: String,
+  estado: String,
+  colonia: String,
+  calle: String,
+  numCasa: String,
+  telefono: String,
+  cliente: clienteSchema,
+})
+
 //Esquema para Pedido
 const pedidoSchema = mongoose.Schema({
   id_pedido: Number,
@@ -38,6 +51,7 @@ const pedidoSchema = mongoose.Schema({
   fechaEntrega: Date,
   productos: [productoSchema],
   cliente: clienteSchema,
+  destino: destinoSchema,
   pago: pagoSchema,
 })
 
